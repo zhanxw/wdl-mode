@@ -1,4 +1,21 @@
-;; a simple major mode, wdl-mode, for Workflow Definition Language
+;;; wdl-mode.el --- WDL (Workflow Definition Language) major mode
+
+;; Copyright (C) 2018 Xiaowei Zhan
+
+;; Author: Xiaowei Zhan <zhanxw@gmail.com>
+;; URL: http://github.com/zhanxw/wdl-mode
+;; Version: 20170709
+;; Created: 14 Jul 2010
+;; Keywords: languages
+
+;; This file is not part of GNU Emacs.
+
+;;; Commentary:
+
+;; This package provides a major mode for WDL (Workflow Definition Language).
+;; It supports basic font-lock highlights and indentation.
+
+;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Syntax table and font-lock types
@@ -25,7 +42,7 @@
                             "read_lines" "read_tsv" "read_map" "read_object" "read_objects" "read_json" "read_int" "read_string" "read_float" "read_boolean"
                             "write_lines" "write_tsv" "write_map" "write_object" "write_objects" "write_json"
                             "size" "sub" "range" "transpose" "zip" "cross" "length" "prefix" "select_first" "select_all" "defined"
-                            "basename" "floor" "ceil" "round" 
+                            "basename" "floor" "ceil" "round"
                             ))
 
              ;; generate regex string for each category of keywords
@@ -39,7 +56,7 @@
         (,x-constants-regexp . font-lock-constant-face)
         (,x-functions-regexp . font-lock-function-name-face)
         (,x-keywords-regexp . font-lock-keyword-face))
-      )      
+      )
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -68,7 +85,7 @@
           (progn
             (save-excursion
               (forward-line -1)
-              (setq cur-indent (- (current-indentation) default-tab-width)))
+              (setq cur-indent (- (current-indentation) tab-width)))
             (if (< cur-indent 0) ; We can't indent past the left margin
                 (setq cur-indent 0)))
         (save-excursion
@@ -80,7 +97,7 @@
                   (setq not-indented nil))
               (if (looking-at "^.*\\(<<<\\|{\\)$") ; This hint indicates that we need to indent an extra level
                   (progn
-                    (setq cur-indent (+ (current-indentation) default-tab-width)) ; Do the actual indenting
+                    (setq cur-indent (+ (current-indentation) tab-width)) ; Do the actual indenting
                     (setq not-indented nil))
                 (if (bobp)
                     (setq not-indented nil)))))))
@@ -98,7 +115,7 @@
   (setq font-lock-defaults '((wdl-font-lock-keywords)))
   (add-hook 'completion-at-point-functions 'wdl-completion-at-point nil 'local)
   ;; Register our indentation function
-  (set (make-local-variable 'indent-line-function) 'wdl-indent-line)  
+  (set (make-local-variable 'indent-line-function) 'wdl-indent-line)
   )
 
 ;; add the mode to the `features' list
@@ -135,3 +152,5 @@
 ;;   (syntax-propertize-rules
 ;;    (demo-triple-quoted-string-regex
 ;;         (0 (ignore (demo-stringify-triple-quote))))))
+
+;;; wdl-mode.el ends here
