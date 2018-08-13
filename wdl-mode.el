@@ -21,6 +21,9 @@
 ;; Syntax table and font-lock types
 (defvar wdl-mode-syntax-table nil "Syntax table for `wdl-mode'.")
 
+(defvar wdl-indent-level 2
+  "Indentation of statements with respect to containing block.")
+
 (setq wdl-mode-syntax-table
       (let ( (synTable (make-syntax-table)))
         ;; python style comment: “# …”
@@ -85,7 +88,7 @@
           (progn
             (save-excursion
               (forward-line -1)
-              (setq cur-indent (- (current-indentation) tab-width)))
+              (setq cur-indent (- (current-indentation) wdl-indent-level)))
             (if (< cur-indent 0) ; We can't indent past the left margin
                 (setq cur-indent 0)))
         (save-excursion
@@ -97,7 +100,7 @@
                   (setq not-indented nil))
               (if (looking-at "^.*\\(<<<\\|{\\)$") ; This hint indicates that we need to indent an extra level
                   (progn
-                    (setq cur-indent (+ (current-indentation) tab-width)) ; Do the actual indenting
+                    (setq cur-indent (+ (current-indentation) wdl-indent-level)) ; Do the actual indenting
                     (setq not-indented nil))
                 (if (bobp)
                     (setq not-indented nil)))))))
