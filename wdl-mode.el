@@ -116,7 +116,7 @@
   (if (bobp)
       (indent-line-to 0)   ; First line is always non-indented
     (let ((not-indented t) cur-indent)
-      (if (looking-at "^[^{\n]*\\(>>>\\|}\\)$") ; If the line we are looking at is the end of a block, then decrease the indentation
+      (if (looking-at "^[^{\n]*\\(>>>\\|}\\) *$") ; If the line we are looking at is the end of a block, then decrease the indentation
           (progn
             (save-excursion
               (forward-line -1)
@@ -126,11 +126,11 @@
         (save-excursion
           (while not-indented ; Iterate backwards until we find an indentation hint
             (forward-line -1)
-            (if (looking-at "^[^{\n]*\\(>>>\\|}\\)$") ; This hint indicates that we need to indent at the level of the END_ token
+            (if (looking-at "^[^{\n]*\\(>>>\\|}\\) *$") ; This hint indicates that we need to indent at the level of the END_ token
                 (progn
                   (setq cur-indent (current-indentation))
                   (setq not-indented nil))
-              (if (looking-at "^.*\\(<<<\\|{\\)$") ; This hint indicates that we need to indent an extra level
+              (if (looking-at "^.*\\(<<<\\|{\\) *$") ; This hint indicates that we need to indent an extra level
                   (progn
                     (setq cur-indent (+ (current-indentation) wdl-indent-level)) ; Do the actual indenting
                     (setq not-indented nil))
